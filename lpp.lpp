@@ -1,34 +1,34 @@
 %{
 #include "hpp.hpp"
-string LexString;											// string buffer
+string LexString;											/* string buffer */
 %}
 %option noyywrap
 %option yylineno
 %x lexstring docstring
 %%
-#[^\n]*				{}
+#[^\n]*			{}
 
-'					{BEGIN(lexstring);LexString="";}		/* string parser */
-<lexstring>'		{BEGIN(INITIAL);
-					yylval.o = new Str(LexString); return STR; }
-<lexstring>\\'		{LexString+='\'';}
-<lexstring>\\t		{LexString+='\t';}
-<lexstring>\\n		{LexString+='\n';}
-<lexstring>.		{LexString+=yytext[0];}
+'				{BEGIN(lexstring);LexString="";}			/* string parser */
+<lexstring>'	{BEGIN(INITIAL);yylval.o = new Str(LexString); return STR; }
+<lexstring>\\'	{LexString+='\'';}
+<lexstring>\\t	{LexString+='\t';}
+<lexstring>\\n	{LexString+='\n';}
+<lexstring>.	{LexString+=yytext[0];}
 
-\"					{BEGIN(docstring);LexString="";}		/* docstring */
-<docstring>\"		{BEGIN(INITIAL);
-					yylval.o = new Str(LexString); return DOC; }
-<docstring>\\\"		{LexString+='"';}
-<docstring>\\t		{LexString+='\t';}
-<docstring>\\n		{LexString+='\n';}
-<docstring>.		{LexString+=yytext[0];}
+\"				{BEGIN(docstring);LexString="";}			/* docstring */
+<docstring>\"	{BEGIN(INITIAL);yylval.o = new Str(LexString); return DOC; }
+<docstring>\\\"	{LexString+='"';}
+<docstring>\\t	{LexString+='\t';}
+<docstring>\\n	{LexString+='\n';}
+<docstring>.	{LexString+=yytext[0];}
 
-[a-zA-Z0-9_]+		TOC(Sym,SYM)
+[a-zA-Z0-9_]+	TOC(Sym,SYM)
 
-\=					TOC(Op,EQ)
-\@					TOC(Op,AT)
+\=				TOC(Op,EQ)
+\@				TOC(Op,AT)
 
-[ \t\r\n]+			{}
-.					{}
+\+				TOC(Op,ADD)
+
+[ \t\r\n]+		{}
+.				{}
 %%

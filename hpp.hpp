@@ -1,6 +1,7 @@
 #ifndef _H_DOS
 #define _H_DOS
 										// ==== metainformation ====
+
 #define TITLE "# [d]ymaniac [o]bject [s]ystem"
 #define AUTHOR "(c) Dmitry Ponyatov <dponyatov@gmail.com>, all rights reserved"
 #define LICENSE "http://www.gnu.org/copyleft/lesser.html"
@@ -23,6 +24,7 @@ struct Sym {							// ==== abstract symbolic type ====
 	vector<Sym*> nest;					// \ ---- nest[]ed elements ----
 	void push(Sym*);					// /
 	map<string,Sym*> par;				// \ ---- par{}ameters ----
+	void setpar(Sym*);					// /
 	string dump(int depth=0);			// \ ---- dump as text ----
 	string pad(int);
 	virtual string tagval();			// <T:V> header string
@@ -31,6 +33,7 @@ struct Sym {							// ==== abstract symbolic type ====
 	virtual Sym* doc(Sym*);				// A "B"
 	virtual Sym* eq(Sym*);				// A = B
 	virtual Sym* at(Sym*);				// A @ B
+	virtual Sym* add(Sym*);				// A + B
 };
 extern map<string, Sym*> env;			// \ ==== global environment ====
 extern void env_init();					// /
@@ -46,6 +49,8 @@ extern Sym* T;							// true
 extern Sym* F;							// false
 extern Sym* E;							// error
 extern Sym* D;							// default
+extern Sym* Rd;							// read
+extern Sym* Wr;							// write
 
 struct Str:Sym { Str(string);			// ---- string ----
 	string tagval(); };
@@ -57,9 +62,13 @@ typedef Sym*(*FN)(Sym*);
 struct Fn:Sym { Fn(string,FN); FN fn; Sym*at(Sym*); };
 
 										// ==== file io ====
-struct Dir:Sym { Dir(string);
-	string tagval(); };
+struct Dir:Sym { Dir(string);			// ---- directory ----
+	string tagval(); Sym* add(Sym*); };
 extern Sym* dir(Sym*);
+struct File:Sym { File(string);			// ---- file ----
+	string tagval();
+	FILE *fh; ~File(); };
+extern Sym* file(Sym*);
 
 extern int yylex();						// \ ==== lexer interface /flex/ ====
 extern int yylineno;

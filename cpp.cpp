@@ -9,6 +9,7 @@ void W(string s)	{ cout << s; }						// /
 Sym::Sym(string T,string V) { tag=T; val=V; }			// <T:V> \ constructor
 Sym::Sym(string V):Sym("sym",V) {}						// token /
 void Sym::push(Sym*o) { nest.push_back(o); }			// add nest[]ed
+void Sym::setpar(Sym*o) { par[o->val]=o; }				// add par{}ameter
 
 string Sym::tagval() { return "<"+tag+":"+val+">"; }	// <T:V> header string
 string Sym::tagstr() { return "<"+tag+":'"+val+"'>"; }	// <T:'V'>
@@ -31,19 +32,22 @@ Sym* Sym::eval() {
 		(*it) = (*it)->eval();
 	return this; }
 														// ---- operators ----
-Sym* Sym::doc(Sym*o){ par["doc"]=o; return this; }
-Sym* Sym::eq(Sym*o) { env[val]=o; return o; }
-Sym* Sym::at(Sym*o) { push(o); return this; }
+Sym* Sym::doc(Sym*o)	{ par["doc"]=o; return this; }
+Sym* Sym::eq(Sym*o)		{ env[val]=o; return o; }
+Sym* Sym::at(Sym*o)		{ push(o); return this; }
+Sym* Sym::add(Sym*o)	{ push(o); return this; }
 
 														// ==== scalars ====
-														// ---- specials ----
-Sym* N = new Sym("N","");
+
+Sym* N = new Sym("N","");								// ---- specials ----
 Sym* T = new Sym("bool","true");
 Sym* F = new Sym("bool","false");
 Sym* E = new Sym("error","");
 Sym* D = new Sym("default","");
-														// ---- string ----
-Str::Str(string V):Sym("str",V) {}
+Sym* Rd = new Sym("mode","R");
+Sym* Wr = new Sym("mode","W");
+
+Str::Str(string V):Sym("str",V) {}						// ---- string ----
 string Str::tagval() { return tagstr(); }
 														// ==== functionals ====
 Op::Op(string V):Sym("op",V) {}							// ---- operator ----
@@ -54,6 +58,7 @@ Sym* Op::eval() {
 	if (nest.size()==2) {
 		if (val=="doc")	return nest[0]->doc(nest[1]);
 		if (val=="@")	return nest[0]->at(nest[1]);
+		if (val=="+")	return nest[0]->add(nest[1]);
 	}
 	return this; }
 
@@ -62,8 +67,13 @@ Sym* Fn::at(Sym*o) { return fn(o); }
 
 														// ==== file io ====
 
-Sym* dir(Sym*o) { return new Dir(o->val); }				// ---- directory ----
-string Dir::tagval() { return tagstr(); }
+Sym* dir(Sym*o) { return new Dir(o->val); }				// \ --- directory ---
+string Dir::tagval() { return tagstr(); }				// /
+
+File::File(string V):Sym("file",V) {}					// \ ---- file ----
+File::~File() { if (fh) fclose(fh); }
+Sym* file(Sym*o) { return new File(o->val); }			
+string File::tagval() { return tagstr(); }				// /
 
 map<string, Sym*> env;									// \ global environment
 void env_init() {										// /
@@ -73,7 +83,9 @@ void env_init() {										// /
 	// ---- specials ----
 	env["N"] = N;	env["T"] = T;	env["F"] = F;
 	env["E"] = E;	env["D"] = D;
+	env["R"] = Rd;	env["W"] = Wr;
 	// ---- file io ----
 	env["dir"]		=new Fn("dir",dir);
+	env["file"]		=new Fn("file",file);
 }
 
