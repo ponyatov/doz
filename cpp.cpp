@@ -19,7 +19,7 @@ string Sym::dump(int depth) {							// dump as text
 	for (auto it=nest.begin(),e=nest.end();it!=e;it++)	// nest[]ed
 		S += (*it)->dump(depth+1);
 	return S; }
-string Sym::pad(int n) {								// pad as tree 
+string Sym::pad(int n) {								// pad as tree
 	string S;
 	for(int i=0;i<n-1;i++) S+="|   ";
 	if (n) S+="\\___";
@@ -31,6 +31,7 @@ Sym* Sym::eval() {
 		(*it) = (*it)->eval();
 	return this; }
 														// ---- operators ----
+Sym* Sym::doc(Sym*o){ par["doc"]=o; return this; }
 Sym* Sym::eq(Sym*o) { env[val]=o; return o; }
 Sym* Sym::at(Sym*o) { push(o); return this; }
 
@@ -51,7 +52,8 @@ Sym* Op::eval() {
 		return nest[0]->eq(nest[1]->eval()); }
 	Sym::eval();
 	if (nest.size()==2) {
-		if (val=="@") return nest[0]->at(nest[1]);
+		if (val=="doc")	return nest[0]->doc(nest[1]);
+		if (val=="@")	return nest[0]->at(nest[1]);
 	}
 	return this; }
 

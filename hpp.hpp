@@ -28,6 +28,7 @@ struct Sym {							// ==== abstract symbolic type ====
 	virtual string tagval();			// <T:V> header string
 	string tagstr();					// / <T:'V'>
 	virtual Sym* eval();				// ---- compute (evaluate) object ----
+	virtual Sym* doc(Sym*);				// A "B"
 	virtual Sym* eq(Sym*);				// A = B
 	virtual Sym* at(Sym*);				// A @ B
 };

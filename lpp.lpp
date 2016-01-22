@@ -11,6 +11,7 @@ string LexString;											// string buffer
 '					{BEGIN(lexstring);LexString="";}		/* string parser */
 <lexstring>'		{BEGIN(INITIAL);
 					yylval.o = new Str(LexString); return STR; }
+<lexstring>\\'		{LexString+='\'';}
 <lexstring>\\t		{LexString+='\t';}
 <lexstring>\\n		{LexString+='\n';}
 <lexstring>.		{LexString+=yytext[0];}
@@ -18,6 +19,7 @@ string LexString;											// string buffer
 \"					{BEGIN(docstring);LexString="";}		/* docstring */
 <docstring>\"		{BEGIN(INITIAL);
 					yylval.o = new Str(LexString); return DOC; }
+<docstring>\\\"		{LexString+='"';}
 <docstring>\\t		{LexString+='\t';}
 <docstring>\\n		{LexString+='\n';}
 <docstring>.		{LexString+=yytext[0];}

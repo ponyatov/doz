@@ -1,3 +1,3 @@
-TITLE	= '[d]ymaniac [o]bject [s]ystem'	TITLE
-next	= dir @ MODULE						next
+TITLE	= '[d]ymaniac [o]bject [s]ystem'	"module title"
+next	= dir @ MODULE						"next generation dos"
 
