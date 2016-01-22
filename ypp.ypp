@@ -1,0 +1,15 @@
+%{
+#include "hpp.hpp"
+%}
+%defines %union { Sym*o; }
+%token <o> SYM STR DOC		/* symbol 'string' "docstring" */
+%token <o> EQ AT			/* = @ */
+%type <o> ex scalar
+%%
+REPL : | REPL ex { W($2); W("\n-------"); W($2->eval()); W("\n=========\n"); } ;
+scalar : SYM | STR | DOC ;
+ex	: scalar
+	| ex EQ ex	{ $$=$2; $$->push($1); $$->push($3); }
+	| ex AT ex	{ $$=$2; $$->push($1); $$->push($3); }
+;
+%%

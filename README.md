@@ -1,2 +1,1 @@
-# dos
-[d]ymaniac [o]bject [s]ystem
+# [d]ymaniac [o]bject [s]ystem
