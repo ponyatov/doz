@@ -41,6 +41,9 @@ extern void env_init();					// /
 extern void W(Sym*);					// \ ==== writers ====
 extern void W(string);					// /
 
+										// ==== directive ====
+struct Directive:Sym {
+	Directive(string); };
 										// ==== scalars ====
 
 										// ---- specials ----

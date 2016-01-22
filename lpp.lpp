@@ -1,34 +1,41 @@
 %{
 #include "hpp.hpp"
 string LexString;											/* string buffer */
+void incLude(Sym*inc) {										// .inc processing
+	if (!(yyin = fopen(inc->val.c_str(),"r"))) yyerror("");	// open
+	yypush_buffer_state(yy_create_buffer(yyin,YY_BUF_SIZE));// push to lexer
+}
 %}
 %option noyywrap
 %option yylineno
 %x lexstring docstring
 %%
-#[^\n]*			{}
+#[^\n]*			{}											/* line comment */
+^\.inc[^\n]*	{incLude(new Directive(yytext));}			/* .include */
 
-'				{BEGIN(lexstring);LexString="";}			/* string parser */
-<lexstring>'	{BEGIN(INITIAL);yylval.o = new Str(LexString); return STR; }
+															/* string parser */
+'				{BEGIN(lexstring);LexString="";}
+<lexstring>'	{BEGIN(INITIAL); yylval.o = new Str(LexString); return STR; }
 <lexstring>\\'	{LexString+='\'';}
 <lexstring>\\t	{LexString+='\t';}
 <lexstring>\\n	{LexString+='\n';}
 <lexstring>.	{LexString+=yytext[0];}
-
-\"				{BEGIN(docstring);LexString="";}			/* docstring */
-<docstring>\"	{BEGIN(INITIAL);yylval.o = new Str(LexString); return DOC; }
+															/* docstring */
+\"				{BEGIN(docstring);LexString="";}
+<docstring>\"	{BEGIN(INITIAL); yylval.o = new Str(LexString); return DOC; }
 <docstring>\\\"	{LexString+='"';}
 <docstring>\\t	{LexString+='\t';}
 <docstring>\\n	{LexString+='\n';}
 <docstring>.	{LexString+=yytext[0];}
 
-[a-zA-Z0-9_]+	TOC(Sym,SYM)
+[a-zA-Z0-9_]+	TOC(Sym,SYM)								/* symbol */
 
-\=				TOC(Op,EQ)
+\=				TOC(Op,EQ)									/* operators */
 \@				TOC(Op,AT)
-
 \+				TOC(Op,ADD)
 
 [ \t\r\n]+		{}
 .				{}
+<<EOF>>			{ yypop_buffer_state();		/* end of .inluded file */
+				if (!YY_CURRENT_BUFFER) yyterminate();}
 %%

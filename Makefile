@@ -1,6 +1,8 @@
+DO = do.do lexfiles.do
+
 MODULE = $(notdir $(CURDIR))
 .PHONY: go
-go: ./exe.exe do.do
+go: ./exe.exe $(DO)
 	./exe.exe < do.do > log.log && tail $(TAIL) log.log
 C = cpp.cpp $(OS).cpp ypp.tab.cpp lex.yy.c
 H = hpp.hpp $(OS).hpp ypp.tab.hpp

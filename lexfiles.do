@@ -1,4 +1,4 @@
-# lexical skeleton
+# lexical fileset skeleton
 
 next		= dir @ MODULE					"next generation dos"
 
