@@ -61,8 +61,8 @@ Fn::Fn(string V, FN F):Sym("fn",V) { fn=F; }			// ---- function ----
 Sym* Fn::at(Sym*o) { return fn(o); }
 
 														// ==== file io ====
-Dir::Dir(string V):Sym("dir",V) {}						// ---- directory ----
-Sym* dir(Sym*o) { return new Dir(o->val); }
+
+Sym* dir(Sym*o) { return new Dir(o->val); }				// ---- directory ----
 string Dir::tagval() { return tagstr(); }
 
 map<string, Sym*> env;									// \ global environment
