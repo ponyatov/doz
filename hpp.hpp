@@ -7,6 +7,8 @@
 #define LICENSE "http://www.gnu.org/copyleft/lesser.html"
 #define GITHUB "https://github.com/ponyatov/dos"
 #define LOGO "Rubik_64x64"
+#define ABOUT "SmallTalk-like object system powered by bI language " \
+				"(with algolic syntax)"
 
 #include <iostream>
 #include <cstdlib>

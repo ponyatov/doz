@@ -112,6 +112,7 @@ void env_init() {										// /
 	env["AUTHOR"]	=new Str(AUTHOR);
 	env["LICENSE"]	=new Str(LICENSE);
 	env["GITHUB"]	=new Str(GITHUB);
+	env["ABOUT"]	=new Str(ABOUT);
 	// ---- specials ----
 	env["N"] = N;	env["T"] = T;	env["F"] = F;
 	env["E"] = E;	env["D"] = D;

@@ -22,6 +22,7 @@ gitignore	= next + file @ '.gitignore'
 
 readme += '# ![logo](https://github.com/ponyatov/icons/raw/master/'+LOGO+'.png) '
 readme += MODULE+' : '+TITLE+'\n'
+readme += '### '+ABOUT+'\n'
 readme += '\n'+AUTHOR+'\n'
 readme += '\nlicense: '+LICENSE+'\n'
 readme += '\nGitHub: '+GITHUB+'\n'
