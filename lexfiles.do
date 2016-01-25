@@ -32,3 +32,8 @@ readme += '\nGitHub: '+GITHUB+'\n'
 bat += '@start .\n'
 bat += '@gvim -c "colorscheme peachpuff" -p '+files/' '+'\n'
 
+# .gitignore
+
+gitignore += '*~\n*.swp\n*.exe\n*.*log\nypp.tab.?pp\nlex.yy.c\nres.res\n'
+gitignore += MODULE+'/\n'
+
