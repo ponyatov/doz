@@ -30,5 +30,5 @@ readme += '\nGitHub: '+GITHUB+'\n'
 # bat
 
 bat += '@start .\n'
-bat += '@gvim -p '+files/' '+'\n'
+bat += '@gvim -c "colorscheme peachpuff" -p '+files/' '+'\n'
 
