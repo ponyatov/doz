@@ -1,4 +1,4 @@
-TITLE	= '[d]ymaniac [o]bject [s]ystem'	"module title"
+TITLE	= '[d]ymanic [o]bject [s]ystem'		"module title"
 
 .inc lexfiles.do
 

@@ -15,3 +15,7 @@ lex.yy.c: lpp.lpp
 	flex $<
 res.res: rc.rc
 	windres $< -O coff -o $@
+
+.PHONY: upgrade
+upgrade:
+	cp $(MODULE)/README.md ./README.md

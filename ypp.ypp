@@ -3,12 +3,15 @@
 %}
 %defines %union { Sym*o; }
 %token <o> SYM STR DOC			/* symbol 'string' "docstring" */
+%token <o> L R LQ RQ LB RB		/* ( ) [ ] { } */
 %token <o> EQ AT				/* = @ */
+%token <o> INS DEL				/* += -= */
 %token <o> ADD SUB MUL DIV POW	/* + */
-%type <o> ex scalar
+%type <o> ex scalar list		/* expression [list] {lambda} */
 
 %left EQ
 %left ADD SUB
+%left MUL DIV
 %left DOC
 %left AT
 %%
@@ -16,8 +19,18 @@ REPL : | REPL ex { W($2); W("\n-------"); W($2->eval()); W("\n=========\n"); } ;
 scalar : SYM | STR | DOC ;
 ex	: scalar
 	| ex DOC		{ $$=new Op("doc"); $$->push($1); $$->push($2); }
+	| L ex R		{ $$=$2; }
+	| LQ list RQ	{ $$=$2; }
 	| ex EQ ex		{ $$=$2; $$->push($1); $$->push($3); }
 	| ex AT ex		{ $$=$2; $$->push($1); $$->push($3); }
 	| ex ADD ex		{ $$=$2; $$->push($1); $$->push($3); }
+	| ex SUB ex		{ $$=$2; $$->push($1); $$->push($3); }
+	| ex MUL ex		{ $$=$2; $$->push($1); $$->push($3); }
+	| ex DIV ex		{ $$=$2; $$->push($1); $$->push($3); }
+	| ex INS ex		{ $$=$2; $$->push($1); $$->push($3); }
+	| ex DEL ex		{ $$=$2; $$->push($1); $$->push($3); }
+;
+list :				{ $$=new List(); }
+	| list ex		{ $$=$1; $$->push($2); }
 ;
 %%

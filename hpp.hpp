@@ -24,16 +24,19 @@ struct Sym {							// ==== abstract symbolic type ====
 	vector<Sym*> nest;					// \ ---- nest[]ed elements ----
 	void push(Sym*);					// /
 	map<string,Sym*> par;				// \ ---- par{}ameters ----
-	void setpar(Sym*);					// /
+	void partag(Sym*);					//   par[obj.tag]=obj
+	void parval(Sym*);					// / par[obj.val]=obj
 	string dump(int depth=0);			// \ ---- dump as text ----
 	string pad(int);
 	virtual string tagval();			// <T:V> header string
-	string tagstr();					// / <T:'V'>
 	virtual Sym* eval();				// ---- compute (evaluate) object ----
 	virtual Sym* doc(Sym*);				// A "B"
 	virtual Sym* eq(Sym*);				// A = B
 	virtual Sym* at(Sym*);				// A @ B
 	virtual Sym* add(Sym*);				// A + B
+	virtual Sym* div(Sym*);				// A / B
+	virtual Sym* ins(Sym*);				// A += B
+	virtual Sym* str();					// str(A)
 };
 extern map<string, Sym*> env;			// \ ==== global environment ====
 extern void env_init();					// /
@@ -42,8 +45,8 @@ extern void W(Sym*);					// \ ==== writers ====
 extern void W(string);					// /
 
 										// ==== directive ====
-struct Directive:Sym {
-	Directive(string); };
+struct Directive:Sym { Directive(string); };
+
 										// ==== scalars ====
 
 										// ---- specials ----
@@ -55,22 +58,22 @@ extern Sym* D;							// default
 extern Sym* Rd;							// read
 extern Sym* Wr;							// write
 
-struct Str:Sym { Str(string);			// ---- string ----
-	string tagval(); };
+struct Str:Sym { Str(string); 			// ---- string ----
+	Sym*add(Sym*o); };
+
+										// ==== composites ====
+struct List:Sym { List(); 				// [list]
+	Sym*str(); Sym*div(Sym*); };
 
 										// ==== functionals ====
-struct Op:Sym { Op(string);				// ---- operator ----
-	Sym*eval(); };
+struct Op:Sym { Op(string); Sym*eval(); };
 typedef Sym*(*FN)(Sym*);
 struct Fn:Sym { Fn(string,FN); FN fn; Sym*at(Sym*); };
 
 										// ==== file io ====
-struct Dir:Sym { Dir(string);			// ---- directory ----
-	string tagval(); Sym* add(Sym*); };
+struct Dir:Sym { Dir(string); Sym* add(Sym*); };
 extern Sym* dir(Sym*);
-struct File:Sym { File(string);			// ---- file ----
-	string tagval();
-	FILE *fh; ~File(); };
+struct File:Sym { File(string); FILE *fh; ~File(); Sym*ins(Sym*); };
 extern Sym* file(Sym*);
 
 extern int yylex();						// \ ==== lexer interface /flex/ ====
