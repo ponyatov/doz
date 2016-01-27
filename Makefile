@@ -1,7 +1,4 @@
-DO = do.do lexfiles.do
-
 include ../Y/Makefile
-
 .PHONY: upgrade
 upgrade: 
 	cp dos/README.md ./
