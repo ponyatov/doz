@@ -26,6 +26,7 @@ readme += '### '+ABOUT+'\n'
 readme += '\n'+AUTHOR+'\n'
 readme += '\nlicense: '+LICENSE+'\n'
 readme += '\nGitHub: '+GITHUB+'\n'
+readme += '\n### ![logo](https://github.com/ponyatov/icons/raw/master/logo64x64.png) powered by bI dymanic language\n'
 
 # bat
 
@@ -37,3 +38,5 @@ bat += '@gvim -c "colorscheme peachpuff" -p '+files/' '+'\n'
 gitignore += '*~\n*.swp\n*.exe\n*.*log\nypp.tab.?pp\nlex.yy.c\nres.res\n'
 gitignore += MODULE+'/\n'
 
+# rc.rc
+win32rc += 'logo ICON "../icons/'+LOGO+'.ico"\n'
