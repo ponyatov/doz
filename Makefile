@@ -17,6 +17,8 @@ res.res: rc.rc
 	windres $< -O coff -o $@
 
 .PHONY: upgrade
-upgrade: ./README.md ./.gitignore
-%: $(MODULE)/%
-	cp $< $@
+upgrade: 
+	cp dos/README.md ./
+	cp dos/.gitignore ./
+	cp dos/rc.rc ./
+

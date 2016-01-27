@@ -6,3 +6,5 @@
 license: http://www.gnu.org/copyleft/lesser.html
 
 GitHub: https://github.com/ponyatov/dos
+
+### ![logo](https://github.com/ponyatov/icons/raw/master/logo64x64.png) powered by bI dymanic language
