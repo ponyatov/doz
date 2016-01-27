@@ -1,2 +1,2 @@
 @start .
-@gvim -p do.do lexfiles.do log.log ypp.ypp lpp.lpp hpp.hpp cpp.cpp win32.hpp win32.cpp Makefile bat.bat README.md .gitignore 
+@gvim -p dos.bI ../Y/lexfiles.do dos.blog ../Y/ypp.ypp ../Y/lpp.lpp meta.hpp ../Y/hpp.hpp ../Y/cpp.cpp ../Y/win32.hpp ../Y/win32.cpp Makefile bat.bat README.md .gitignore 
